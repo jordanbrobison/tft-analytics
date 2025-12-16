@@ -26,7 +26,7 @@ def fetch_and_save_leaderboard() -> Dict[str, Any]:
     }
 
     logger.info("=" * 80)
-    logger.info("Step 1: Fetching Masters+ Leaderboard")
+    logger.info("Step 1: Fetching Grandmaster+ Leaderboard")
     logger.info("=" * 80)
 
     # Start collection log
@@ -35,10 +35,10 @@ def fetch_and_save_leaderboard() -> Dict[str, Any]:
     try:
         # Fetch leaderboard data
         with RiotAPIClient(api_key=Config.RIOT_API_KEY) as client:
-            logger.info("Fetching all Masters+ players...")
-            all_players = client.get_all_masters_plus_players()
+            logger.info("Fetching Grandmaster+ players (excluding Masters)...")
+            all_players = client.get_grandmaster_plus_players()
             stats['players_fetched'] = len(all_players)
-            stats['api_calls'] = 3  # Master, Grandmaster, Challenger
+            stats['api_calls'] = 2  # Grandmaster, Challenger only
 
             logger.info(f"Fetched {len(all_players)} players from API")
 
@@ -54,7 +54,7 @@ def fetch_and_save_leaderboard() -> Dict[str, Any]:
         complete_collection_log(log_id, 'completed', stats)
 
         logger.info("=" * 80)
-        logger.info("Step 1 Complete: Leaderboard data saved to database")
+        logger.info("Step 1 Complete: Grandmaster+ leaderboard saved to database")
         logger.info("=" * 80)
 
     except Exception as e:

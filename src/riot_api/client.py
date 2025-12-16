@@ -358,6 +358,37 @@ class RiotAPIClient:
         logger.info(f"Total Masters+ players: {len(all_players)}")
         return all_players
 
+    def get_grandmaster_plus_players(self) -> List[Dict[str, Any]]:
+        """Fetch Grandmaster and Challenger players only (excludes Master).
+
+        Returns:
+            List of all player entries from Grandmaster and Challenger tiers
+        """
+        logger.info("Fetching Grandmaster+ players...")
+
+        all_players = []
+
+        # Fetch only GM and Challenger
+        for tier_name, tier_method in [
+            ("GRANDMASTER", self.get_grandmaster_league),
+            ("CHALLENGER", self.get_challenger_league)
+        ]:
+            try:
+                tier_data = tier_method()
+                entries = tier_data.get("entries", [])
+
+                # Add tier to each player entry
+                for entry in entries:
+                    entry['tier'] = tier_name
+
+                all_players.extend(entries)
+                logger.info(f"Fetched {len(entries)} {tier_name} players")
+            except RiotAPIError as e:
+                logger.error(f"Error fetching {tier_name} tier: {str(e)}")
+
+        logger.info(f"Total Grandmaster+ players: {len(all_players)}")
+        return all_players
+
     def close(self):
         """Close the HTTP session."""
         self.session.close()

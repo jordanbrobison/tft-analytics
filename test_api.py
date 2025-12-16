@@ -17,13 +17,13 @@ def main():
     # Initialize client
     with RiotAPIClient(api_key=Config.RIOT_API_KEY) as client:
 
-        # Test 1: Fetch Masters+ leaderboard
-        print("\nTEST 1: Fetching Masters+ leaderboard")
+        # Test 1: Fetch Grandmaster+ leaderboard
+        print("\nTEST 1: Fetching Grandmaster+ leaderboard")
         print("-" * 80)
 
         try:
-            all_players = client.get_all_masters_plus_players()
-            print(f"Successfully fetched {len(all_players)} Masters+ players")
+            all_players = client.get_grandmaster_plus_players()
+            print(f"Successfully fetched {len(all_players)} Grandmaster+ players")
 
             # Show first player as example
             if all_players:
