@@ -338,13 +338,18 @@ class RiotAPIClient:
 
         # Fetch each tier
         for tier_name, tier_method in [
-            ("Master", self.get_master_league),
-            ("Grandmaster", self.get_grandmaster_league),
-            ("Challenger", self.get_challenger_league)
+            ("MASTER", self.get_master_league),
+            ("GRANDMASTER", self.get_grandmaster_league),
+            ("CHALLENGER", self.get_challenger_league)
         ]:
             try:
                 tier_data = tier_method()
                 entries = tier_data.get("entries", [])
+
+                # Add tier to each player entry
+                for entry in entries:
+                    entry['tier'] = tier_name
+
                 all_players.extend(entries)
                 logger.info(f"Fetched {len(entries)} {tier_name} players")
             except RiotAPIError as e:
